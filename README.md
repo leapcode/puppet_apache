@@ -1,4 +1,4 @@
-puppet module for managing an Apache web server
+Puppet module for managing an Apache web server
 ===============================================
 
 This module tries to manage apache on different distros in a similar manner. a
@@ -26,7 +26,7 @@ have to be deployed to fit this schema.
  * the $apache_no_default_site variable is no longer supported, you should
    switch to passing the parameter "no_default_site => true" to the apache class
 
- * the $use_munin variable is no longer supported, you should switch to 
+ * the $use_munin variable is no longer supported, you should switch to
    passing the parameter 'manage_munin' to the apache class
 
  * the $use_shorewall variable is no longer supported, you should switch to
@@ -69,7 +69,7 @@ To install Apache, simply include the 'apache' class in your manifests:
 
 This will give you a basic managed setup. You can pass a couple parameters to the
 class to have the module do some things for you:
-  
+
   * manage_shorewall: If you have the shorewall module installed and are using
     it then rules will be automatically defined for you to let traffic come from
     the exterior into the web server via port 80, and also 443 if you're using
@@ -87,12 +87,12 @@ class to have the module do some things for you:
 
 For example:
 
-   class { 'apache': 
-     manage_shorewall => true, 
-     manage_munin     => true, 
-     no_default_site  => true,
-     ssl              => true
-   }
+    class { 'apache':
+      manage_shorewall => true,
+      manage_munin     => true,
+      no_default_site  => true,
+      ssl              => true
+    }
 
 You can install the ITK worker model to enforce stronger, per-user security:
 
@@ -110,26 +110,26 @@ Configuring Apache
 To deploy a configuration files to the conf.d or include.d directory under
 Apache's config directory, you can use the following:
 
-apache::config::file { 'filename':
-  content => 'Alias /thisApplication /usr/share/thisApplication/htdocs',
-}
+    apache::config::file { 'filename':
+      content => 'Alias /thisApplication /usr/share/thisApplication/htdocs',
+    }
 
 by default this will deploy a conf.d global configuration file called 'filename'
-with that content. 
+with that content.
 
 You can pass the parameter 'type => include' to add includes for vhosts
 
 
 To manage users in an htpasswd file:
 
-apache::htpasswd_user { "joe@$domain":
-  ensure             => present,   # default: present
-  site               => "$domain", # default: 'absent' - will use $name
-  username           => 'joe',     # default: 'absent' - will use $name
-  password           => "pass",
-  password_iscrypted => false,     # default: false - will sha1 hash the value
-  path               => 'absent'   # default: 'absent' - /var/www/htpasswds/${site}
-}
+    apache::htpasswd_user { "joe@$domain":
+      ensure             => present,   # default: present
+      site               => "$domain", # default: 'absent' - will use $name
+      username           => 'joe',     # default: 'absent' - will use $name
+      password           => "pass",
+      password_iscrypted => false,     # default: false - will sha1 hash the value
+      path               => 'absent'   # default: 'absent' - /var/www/htpasswds/${site}
+    }
 
 This will place an encrypted version of "pass" for user joe into
 /var/www/htpasswds/${site}
@@ -140,35 +140,35 @@ apache::vhost class below for how this is done.
 VirtualHost files
 -----------------
 
-vhosts can be added with the apache::vhost define. 
+vhosts can be added with the apache::vhost define.
 
 You can ship a flat file containing the configuration, or a template. That is
 controlled by the 'vhost_mode' parameter, which can be either 'file', or
-'template' (default). 
+'template' (default).
 
 Unless specified, the source will be automatically pulled from
 modules/site_apache/{templates,files}/vhosts.d, searched in this order:
 
-   "puppet:///modules/site_apache/vhosts.d/${::fqdn}/${name}.conf",
-   "puppet:///modules/site_apache/vhosts.d/{$apache::cluster_node}/${name}.conf",
-   "puppet:///modules/site_apache/vhosts.d/${::operatingsystem}.${::operatingsystemmajrelease}/${name}.conf",
-   "puppet:///modules/site_apache/vhosts.d/${::operatingsystem}/${name}.conf",
-   "puppet:///modules/site_apache/vhosts.d/${name}.conf",
+    "puppet:///modules/site_apache/vhosts.d/${::fqdn}/${name}.conf",
+    "puppet:///modules/site_apache/vhosts.d/{$apache::cluster_node}/${name}.conf",
+    "puppet:///modules/site_apache/vhosts.d/${::operatingsystem}.${::operatingsystemmajrelease}/${name}.conf",
+    "puppet:///modules/site_apache/vhosts.d/${::operatingsystem}/${name}.conf",
+    "puppet:///modules/site_apache/vhosts.d/${name}.conf",
 
 otherwise you can pass a 'content' parameter to configure a template location that
-it should be pulled from, or a 'vhost_source' parameter to specify the file source. 
+it should be pulled from, or a 'vhost_source' parameter to specify the file source.
 
 For example:
 
 This would deploy a the vhost for $domain, pulled from a file from the sources
 listed above:
 
-apache::vhost { "$domain": vhost_mode => 'file' }
+    apache::vhost { "$domain": vhost_mode => 'file' }
 
-apache::vhost { "$domain": 
-                   vhost_mode   => 'file', 
-                   vhost_source => 'modules/site_configs/vhosts.d/${name}.conf" 
-}
+    apache::vhost { "$domain":
+                       vhost_mode   => 'file',
+                       vhost_source => 'modules/site_configs/vhosts.d/${name}.conf"
+    }
 
 There are multiple other additional configurables that you can pass to each
 vhost definition:
@@ -203,27 +203,26 @@ manifests/vhost/template.pp for the full list.
 
 There are various pre-made vhost configurations that use good defaults that you can use:
 
-apache::vhost::gitweb - sets up a gitweb vhost
-apache::vhost::modperl - uses modperl, with optional fastcgi
-apache::vhost::passenger - setup passenger
-apache::vhost::proxy - setup a proxy vhost
-apache::vhost::redirect - vhost to redirect hosts
-apache::vhost::static - a static vhost
-apache::vhost::webdav - for managing webdave accessible targets
+- apache::vhost::gitweb - sets up a gitweb vhost
+- apache::vhost::modperl - uses modperl, with optional fastcgi
+- apache::vhost::passenger - setup passenger
+- apache::vhost::proxy - setup a proxy vhost
+- apache::vhost::redirect - vhost to redirect hosts
+- apache::vhost::static - a static vhost
+- apache::vhost::webdav - for managing webdave accessible targets
 
 Additionally, for php sites, there are several handy pre-made vhost configurations:
 
-apache::vhost::php::drupal
-apache::vhost::php::gallery2
-apache::vhost::php::global_exec_bin_dir
-apache::vhost::php::joomla
-apache::vhost::php::mediawiki
-apache::vhost::php::safe_mode_bin
-apache::vhost::php::silverstripe
-apache::vhost::php::simplemachine
-apache::vhost::php::spip
-apache::vhost::php::standard
-apache::vhost::php::typo3
-apache::vhost::php::webapp
-apache::vhost::php::wordpress
-
+- apache::vhost::php::drupal
+- apache::vhost::php::gallery2
+- apache::vhost::php::global_exec_bin_dir
+- apache::vhost::php::joomla
+- apache::vhost::php::mediawiki
+- apache::vhost::php::safe_mode_bin
+- apache::vhost::php::silverstripe
+- apache::vhost::php::simplemachine
+- apache::vhost::php::spip
+- apache::vhost::php::standard
+- apache::vhost::php::typo3
+- apache::vhost::php::webapp
+- apache::vhost::php::wordpress
