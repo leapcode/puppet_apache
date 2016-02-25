@@ -7,6 +7,11 @@ have to be deployed to fit this schema.
 
 ! Upgrade Notices !
 
+ * The $ssl_cipher_suite has been evaluated from the `cert` module in the
+   past, but is now a hardcoded default for the sake of reducing dependency
+   to other modules. If you were using the `cert` module before, you should
+   pass this parameter when declaring the apache class !
+
  * this module now only works with puppet 2.7 or newer
 
  * this module now uses parameterized classes, if you were using global
