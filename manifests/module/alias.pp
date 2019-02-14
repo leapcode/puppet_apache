@@ -8,7 +8,7 @@ class apache::module::alias ( $ensure = present )
   # directive which needs "authz_core" mod enabled
 
   if ( guess_apache_version() == '2.4') {
-    class { 'authz_core': ensure => $ensure }
+    class { 'apache::module::authz_core': ensure => $ensure }
   }
 
 }

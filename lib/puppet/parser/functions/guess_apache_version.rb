@@ -15,7 +15,7 @@ module Puppet::Parser::Functions
         case release
           when /^7.*/
             version = '2.2'
-          when /^8.*/
+	  when /^8.*|^9.*/
             version = '2.4'
           else
             version = unknown
